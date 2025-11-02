@@ -18,15 +18,15 @@ public class LoginView extends VerticalLayout {
 
         loginForm.addLoginListener(e -> {
 
-            if ("admin".equals(e.getUsername()) && "1234".equals(e.getPassword())) {
-                UI.getCurrent().navigate("crud");
-            } else {
-                loginForm.setError(true);
-                Notification.show("Credenciales inválidas", 3000, Notification.Position.MIDDLE);
+                    if ("admin".equals(e.getUsername()) && "1234".equals(e.getPassword())) {
+                        UI.getCurrent().navigate("crud");
+                    } else {
+                        loginForm.setError(true);
+                        Notification.show("Credenciales inválidas", 3000, Notification.Position.MIDDLE);
 
-            }
+                    }
 
-        });
+                });
 
         add(title, loginForm);
         setSizeFull();
