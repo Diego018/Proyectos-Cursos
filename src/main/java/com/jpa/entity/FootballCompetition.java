@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -16,9 +15,10 @@ public class FootballCompetition {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
+    @Column(name = "id_fotball_competition")
+    private Long id_FootballCompetition;
 
+    private String name;
     @Column(name = "cuantity_price")
     private Integer cuantityPrice;
 

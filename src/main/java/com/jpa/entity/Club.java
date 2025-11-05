@@ -8,30 +8,31 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Club {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //EL ID SEA AI (AUTOINCREMENT)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id_club;
 
-    @Column(name = "name_team")
-    private String nameTeam;
+    @Column(name = "name_club")
+    private String nameClub;
 
-    @OneToOne (targetEntity = Coach.class, cascade = CascadeType.PERSIST)//Va a ser una relacion de uno a uno - la relacion se va a hacer con la clase coach
-    @JoinColumn(name = "id_coach") //Para cambiar el nombre de la clave foranea
+    @OneToOne(targetEntity = Coach.class, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id_coach")
     private Coach coach;
 
     @OneToMany(targetEntity = Player.class, fetch = FetchType.LAZY, mappedBy = "club")
     private List<Player> players;
 
     @ManyToOne(targetEntity = FootballAssociation.class)
+    @JoinColumn(name = "id_fotball_association")
     private FootballAssociation footballAssociation;
 
     @ManyToMany(targetEntity = FootballCompetition.class, fetch = FetchType.LAZY)
-    @JoinTable(name = "club_Competition", joinColumns = @JoinColumn(name = "id_club"), inverseJoinColumns = @JoinColumn(name = "id_competition"))
+    @JoinTable(name = "club_competition", joinColumns = @JoinColumn(name = "id_club"),inverseJoinColumns = @JoinColumn(name = "id_fotball_competition"))
     private List<FootballCompetition> footballCompetitions;
 
 }

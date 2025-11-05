@@ -15,12 +15,15 @@ public class FootballAssociation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_fotball_association")
+    private Long id_fotballAssociation;
+
     private String name;
     private String country;
-    private String ceo;
+    private String president;
 
-    @OneToMany(targetEntity = Club.class, fetch = FetchType.LAZY, mappedBy = "footballAssociation")
+    @OneToMany(targetEntity = Club.class, mappedBy = "footballAssociation")
+
     private List<Club> clubs;
 
 }
