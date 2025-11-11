@@ -248,9 +248,24 @@ public class FootballCompetitionView extends VerticalLayout implements BeforeEnt
             startDatePicker.setWidthFull();
             startDatePicker.setLocale(new Locale("es", "ES"));
 
+            // Validación para no permitir fechas anteriores a hoy
+            startDatePicker.setMin(java.time.LocalDate.now());
+
             endDatePicker = new DatePicker("Fecha de Fin");
             endDatePicker.setWidthFull();
             endDatePicker.setLocale(new Locale("es", "ES"));
+
+            // Validación para no permitir fechas anteriores a hoy
+            endDatePicker.setMin(java.time.LocalDate.now());
+
+            // Validación adicional: la fecha fin no puede ser anterior a la fecha inicio
+            startDatePicker.addValueChangeListener(e -> {
+                if (e.getValue() != null) {
+                    endDatePicker.setMin(e.getValue());
+                } else {
+                    endDatePicker.setMin(java.time.LocalDate.now());
+                }
+            });
 
             if (competition != null) {
                 nameField.setValue(competition.getName());
