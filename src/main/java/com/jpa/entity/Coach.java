@@ -15,13 +15,21 @@ public class Coach {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_coach;
 
-    @Column(name = "name_coach")
+    @Column(name = "name_coach", nullable = false)
     private String nameCoach;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
-    private String nationality;
+
+    @Column(nullable = false)
     private Integer age;
+
+    @ManyToOne(targetEntity = Country.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_country")
+    private Country country;
+
+    @OneToOne(targetEntity = Club.class, fetch = FetchType.LAZY, mappedBy = "coach")
+    private Club club;
 
 
 }

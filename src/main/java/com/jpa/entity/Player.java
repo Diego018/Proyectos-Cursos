@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.checkerframework.checker.units.qual.C;
 
 @Data
 @AllArgsConstructor
@@ -13,24 +14,27 @@ public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_player;
+    @Column(name = "id_player")
+    private Long idPlayer;
 
-    @Column(name = "name_player")
+    @Column(name = "name_player", nullable = false)
     private String namePlayer;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
-    private String nationality;
-    private Integer age;
-    private String position;
 
-    @ManyToOne(targetEntity = Club.class)
+    @Column(nullable = false)
+    private Integer age;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_club")
     private Club club;
 
-    @ManyToOne(targetEntity = Position.class, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_position")
-    private Position positions;
+    private Position position;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_country")
+    private Country country;
 }

@@ -1,15 +1,14 @@
 package com.jpa.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class FootballAssociation {
 
@@ -18,12 +17,17 @@ public class FootballAssociation {
     @Column(name = "id_fotball_association")
     private Long id_fotballAssociation;
 
-    private String name;
-    private String country;
+    @Column(name = "name_association", nullable = false, unique = true)
+    private String nameAssociation;
+
     private String president;
 
-    @OneToMany(targetEntity = Club.class, mappedBy = "footballAssociation")
+    @OneToMany(targetEntity = Club.class, mappedBy = "footballAssociation", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Club> clubs = new HashSet<>();
 
-    private List<Club> clubs;
-
+    @ManyToOne(targetEntity = Country.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_country", nullable = false)
+    private Country country;
 }

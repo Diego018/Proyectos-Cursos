@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +18,7 @@ public class FootballCompetition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_fotball_competition")
-    private Long id_FootballCompetition;
+    private Long idFootballCompetition;
 
     private String name;
     @Column(name = "cuantity_price")
@@ -28,6 +30,8 @@ public class FootballCompetition {
     @Column(name = "end_date", columnDefinition = "DATE")
     private LocalDate endDate;
 
+    @ManyToMany(mappedBy = "footballCompetitions", fetch = FetchType.LAZY)
+    private Set<Club> clubs = new HashSet<>();
 
 
 }
