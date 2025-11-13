@@ -1,4 +1,4 @@
-### Testing: 5 Puntos Críticos del Smoke Test para el Backend de Cultivapp
+### Testing: 5 Puntos Críticos del Smoke Test
 Esta sección documenta los 5 puntos críticos del smoke test para el backend de Cultivapp. Estos tests se ejecutan en cada despliegue para verificar que las funcionalidades principales del servidor están operativas.
 
  # 1. Login (Endpoint de Autenticación)
