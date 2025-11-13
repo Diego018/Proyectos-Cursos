@@ -6,7 +6,7 @@ Esta sección documenta los 5 puntos críticos del smoke test para el backend de
 
 Este test cubre el endpoint de autenticación que valida las credenciales del usuario y genera un token JWT. Cuando se recibe una petición POST a /api/auth/login con email y contraseña, el sistema verifica las credenciales contra la base de datos, y si son correctas, genera y retorna un token JWT válido junto con la información básica del usuario. Este endpoint es la puerta de entrada al sistema y sin él funcionando, ningún usuario puede acceder a la aplicación.
 
-¿Cómo se ejecuta?
+### ¿Cómo se ejecuta?
 
 Enviar una petición POST a /api/auth/login con el body:
 
@@ -29,7 +29,7 @@ Verificar que el token generado tiene la estructura correcta (header.payload.sig
 
 Opcionalmente, verificar que con credenciales inválidas retorna 401 Unauthorized.
 
-¿Qué tipo de test lo prueba?
+### ¿Qué tipo de test lo prueba?
 
 Integration: Prueba la integración entre el controller de autenticación, el servicio de usuarios, el repositorio, la base de datos y la generación de JWT.
 
@@ -40,7 +40,7 @@ Se puede complementar con tests Unit para las funciones individuales de validaci
 
 Este test cubre los endpoints de creación y consulta de cultivos, que son las operaciones más críticas del sistema. La creación permite insertar un nuevo cultivo asociado a un usuario y una especie, mientras que la consulta permite obtener la lista de cultivos. Sin estas operaciones, la funcionalidad core de Cultivapp no existe. Este test verifica que el backend puede recibir datos de cultivos, validarlos, persistirlos en la base de datos, y posteriormente recuperarlos.
 
-¿Cómo se ejecuta?
+### ¿Cómo se ejecuta?
 
 Creación de cultivo:
 
@@ -76,7 +76,7 @@ Verificar que cada cultivo contiene las propiedades esperadas.
 
 Verificar que solo retorna los cultivos del usuario autenticado.
 
-¿Qué tipo de test lo prueba?
+### ¿Qué tipo de test lo prueba?
 
 Integration: Prueba la integración completa desde el controller hasta la base de datos, incluyendo validaciones, seguridad (JWT) y persistencia.
 
@@ -87,7 +87,7 @@ Puede complementarse con tests Unit para las validaciones de negocio específica
 
 Este test verifica que el sistema de validación de tokens JWT funciona correctamente. Incluye verificar que tokens válidos permiten acceso a recursos protegidos, que tokens expirados son rechazados, y que tokens manipulados o inválidos no otorgan acceso. La seguridad de toda la aplicación depende de este mecanismo, ya que protege todos los endpoints que requieren autenticación. .
 
-¿Cómo se ejecuta?
+### ¿Cómo se ejecuta?
 
 Escenario 1 - Token válido: Acceder a un endpoint protegido (GET /api/cultivos) con un token válido.
 
@@ -105,7 +105,7 @@ Escenario 4 - Token expirado: Intentar acceder con un token que ha expirado.
 
 Verificar que la respuesta es 401 Unauthorized y que el mensaje indica que el token ha expirado.
 
-¿Qué tipo de test lo prueba?
+### ¿Qué tipo de test lo prueba?
 
 Unit/Integration: Tests unitarios para las funciones de validación de JWT, y tests de integración para verificar que el filtro/middleware de seguridad funciona correctamente en el flujo completo de peticiones.
 
@@ -114,7 +114,7 @@ Unit/Integration: Tests unitarios para las funciones de validación de JWT, y te
 
 Este test cubre el endpoint que retorna el catálogo completo de especies de plantas disponibles en el sistema. Las especies son entidades maestras fundamentales porque definen las características y requerimientos de cada tipo de cultivo. Sin acceso a este catálogo, no se pueden crear cultivos válidos. Este test verifica que el endpoint responde correctamente y que la base de datos contiene las especies necesarias.
 
-¿Cómo se ejecuta?
+### ¿Cómo se ejecuta?
 
 Autenticarse y obtener un token JWT válido.
 
@@ -132,7 +132,7 @@ Verificar que hay al menos una especie en el sistema (datos iniciales cargados).
 
 Opcional - Test de creación (solo para rol ADMIN): Autenticarse como ADMIN, enviar POST a /api/especies con datos, y verificar respuesta 201 Created.
 
-¿Qué tipo de test lo prueba?
+### ¿Qué tipo de test lo prueba?
 
 Integration: Prueba la integración entre el controller, el servicio de especies, el repositorio y la base de datos.
 
@@ -143,7 +143,7 @@ Puede incluir tests Unit para validaciones específicas de los datos de especies
 
 Este test verifica que la conexión a la base de datos PostgreSQL está establecida y funcionando correctamente. Sin conexión a base de datos, ninguna operación de persistencia funciona y la aplicación es completamente inútil. Este test debe ejecutarse al inicio del smoke test para fallar rápido si hay problemas de infraestructura básica.
 
-¿Cómo se ejecuta?
+### ¿Cómo se ejecuta?
 
 Opción 1 - Health Check endpoint (Recomendada):
 
@@ -175,7 +175,7 @@ Verificar que la operación se completa sin excepciones.
 
 Verificaciones adicionales: Verificar que las tablas principales existen y que los datos iniciales se cargaron correctamente.
 
-¿Qué tipo de test lo prueba?
+### ¿Qué tipo de test lo prueba?
 
 Integration: Prueba la integración entre Spring Boot, JPA/Hibernate y la base de datos PostgreSQL. Es fundamentalmente un test de infraestructura que debe ejecutarse primero.
 
