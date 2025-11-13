@@ -1,7 +1,7 @@
-🧪 Testing: 5 Puntos Críticos del Smoke Test para el Backend de Cultivapp
+### Testing: 5 Puntos Críticos del Smoke Test para el Backend de Cultivapp
 Esta sección documenta los 5 puntos críticos del smoke test para el backend de Cultivapp. Estos tests se ejecutan en cada despliegue para verificar que las funcionalidades principales del servidor están operativas.
 
-1. Login (Endpoint de Autenticación)
+ # 1. Login (Endpoint de Autenticación)
 ¿Qué flujo cubre y por qué debe hacer parte del smoke test?
 
 Este test cubre el endpoint de autenticación que valida las credenciales del usuario y genera un token JWT. Cuando se recibe una petición POST a /api/auth/login con email y contraseña, el sistema verifica las credenciales contra la base de datos, y si son correctas, genera y retorna un token JWT válido junto con la información básica del usuario. Este endpoint es la puerta de entrada al sistema y sin él funcionando, ningún usuario puede acceder a la aplicación.
@@ -35,7 +35,7 @@ Integration: Prueba la integración entre el controller de autenticación, el se
 
 Se puede complementar con tests Unit para las funciones individuales de validación de contraseñas y generación de tokens.
 
-2. CRUD de Cultivos - Creación y Consulta
+# 2. CRUD de Cultivos - Creación y Consulta
 ¿Qué flujo cubre y por qué debe hacer parte del smoke test?
 
 Este test cubre los endpoints de creación y consulta de cultivos, que son las operaciones más críticas del sistema. La creación permite insertar un nuevo cultivo asociado a un usuario y una especie, mientras que la consulta permite obtener la lista de cultivos. Sin estas operaciones, la funcionalidad core de Cultivapp no existe. Este test verifica que el backend puede recibir datos de cultivos, validarlos, persistirlos en la base de datos, y posteriormente recuperarlos.
@@ -82,10 +82,10 @@ Integration: Prueba la integración completa desde el controller hasta la base d
 
 Puede complementarse con tests Unit para las validaciones de negocio específicas.
 
-3. Validación de Tokens JWT
+# 3. Validación de Tokens JWT
 ¿Qué flujo cubre y por qué debe hacer parte del smoke test?
 
-Este test verifica que el sistema de validación de tokens JWT funciona correctamente. Incluye verificar que tokens válidos permiten acceso a recursos protegidos, que tokens expirados son rechazados, y que tokens manipulados o inválidos no otorgan acceso. La seguridad de toda la aplicación depende de este mecanismo, ya que protege todos los endpoints que requieren autenticación.
+Este test verifica que el sistema de validación de tokens JWT funciona correctamente. Incluye verificar que tokens válidos permiten acceso a recursos protegidos, que tokens expirados son rechazados, y que tokens manipulados o inválidos no otorgan acceso. La seguridad de toda la aplicación depende de este mecanismo, ya que protege todos los endpoints que requieren autenticación. .
 
 ¿Cómo se ejecuta?
 
@@ -109,7 +109,7 @@ Verificar que la respuesta es 401 Unauthorized y que el mensaje indica que el to
 
 Unit/Integration: Tests unitarios para las funciones de validación de JWT, y tests de integración para verificar que el filtro/middleware de seguridad funciona correctamente en el flujo completo de peticiones.
 
-4. Catálogo de Especies
+# 4. Catálogo de Especies
 ¿Qué flujo cubre y por qué debe hacer parte del smoke test?
 
 Este test cubre el endpoint que retorna el catálogo completo de especies de plantas disponibles en el sistema. Las especies son entidades maestras fundamentales porque definen las características y requerimientos de cada tipo de cultivo. Sin acceso a este catálogo, no se pueden crear cultivos válidos. Este test verifica que el endpoint responde correctamente y que la base de datos contiene las especies necesarias.
@@ -138,14 +138,14 @@ Integration: Prueba la integración entre el controller, el servicio de especies
 
 Puede incluir tests Unit para validaciones específicas de los datos de especies.
 
-5. Conexión a Base de Datos (PostgreSQL)
+# 5. Conexión a Base de Datos (PostgreSQL)
 ¿Qué flujo cubre y por qué debe hacer parte del smoke test?
 
 Este test verifica que la conexión a la base de datos PostgreSQL está establecida y funcionando correctamente. Sin conexión a base de datos, ninguna operación de persistencia funciona y la aplicación es completamente inútil. Este test debe ejecutarse al inicio del smoke test para fallar rápido si hay problemas de infraestructura básica.
 
 ¿Cómo se ejecuta?
 
-Opción 1 - Health Check endpoint:
+Opción 1 - Health Check endpoint (Recomendada):
 
 Crear un endpoint simple (/health o /api/health) que verifique la conexión.
 
@@ -181,7 +181,7 @@ Integration: Prueba la integración entre Spring Boot, JPA/Hibernate y la base d
 
 Puede complementarse con tests Unit para las configuraciones de conexión.
 
-📝 Notas de Implementación
+# Notas de Implementación
 Estructura de Tests
 
 Los tests de integración deben usar @SpringBootTest o @WebMvcTest según el alcance.
@@ -198,4 +198,4 @@ El tiempo total de ejecución de los smoke tests debe ser menor a 10 minutos.
 
 Usar perfiles de Spring (@ActiveProfiles("test")) para aislar la configuración de pruebas.
 
-La base de datos utilizada es PostgreSQL.
+La base de datos utilizada es PostgreSQL
