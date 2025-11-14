@@ -48,6 +48,9 @@ public class ClubService {
 
     @Transactional
     public ClubDTO createClub(String nameClub, Long coachId, Long associationId) {
+        if (nameClub == null || nameClub.trim().isEmpty()) {
+            throw new RuntimeException("El nombre del club es obligatorio");
+        }
         if (clubRepository.existsByNameClub(nameClub)) {
             throw new RuntimeException("Ya existe un club con ese nombre");
         }
@@ -69,6 +72,7 @@ public class ClubService {
 
         Club savedClub = clubRepository.save(club);
         return convertToDTO(savedClub);
+
     }
 
     @Transactional
@@ -76,6 +80,9 @@ public class ClubService {
         Club club = clubRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Club no encontrado"));
 
+        if (nameClub == null || nameClub.trim().isEmpty()) {
+            throw new RuntimeException("El nombre del club es obligatorio");
+        }
         if (!club.getNameClub().equals(nameClub) && clubRepository.existsByNameClub(nameClub)) {
             throw new RuntimeException("Ya existe un club con ese nombre");
         }
@@ -117,22 +124,28 @@ public class ClubService {
                 .collect(Collectors.toList());
     }
 
-
     private ClubDTO convertToDTO(Club club) {
         ClubDTO dto = new ClubDTO();
         dto.setIdClub(club.getIdClub());
-        dto.setNameClub(club.getNameClub());
+        dto.setNameClub(club.getNameClub() != null ? club.getNameClub() : "");
 
         if (club.getCoach() != null) {
             dto.setCoachId(club.getCoach().getId_coach());
-            dto.setCoachName(club.getCoach().getNameCoach() + " " + club.getCoach().getLastName());
+            dto.setCoachName((club.getCoach().getNameCoach() != null ? club.getCoach().getNameCoach() : "") +
+                    " " + (club.getCoach().getLastName() != null ? club.getCoach().getLastName() : ""));
+        } else {
+            dto.setCoachId(null);
+            dto.setCoachName("");
         }
 
         if (club.getFootballAssociation() != null) {
             dto.setAssociationId(club.getFootballAssociation().getId_fotballAssociation());
-            dto.setAssociationName(club.getFootballAssociation().getNameAssociation());
+            dto.setAssociationName(club.getFootballAssociation().getNameAssociation() != null ?
+                    club.getFootballAssociation().getNameAssociation() : "");
+        } else {
+            dto.setAssociationId(null);
+            dto.setAssociationName("");
         }
-
 
         dto.setTotalPlayers((int) playerRepository.countByClub_IdClub(club.getIdClub()));
 

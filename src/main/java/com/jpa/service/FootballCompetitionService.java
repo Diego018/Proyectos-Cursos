@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -92,7 +94,18 @@ public class FootballCompetitionService {
         dto.setCuantityPrice(competition.getCuantityPrice());
         dto.setStartDate(competition.getStartDate());
         dto.setEndDate(competition.getEndDate());
-        dto.setTotalClubs(competition.getClubs() != null ? competition.getClubs().size() : 0);
+
+        // Manejo seguro de clubs (lazy loading)
+        Set<String> clubNames = new HashSet<>();
+        if (competition.getClubs() != null) {
+            dto.setTotalClubs(competition.getClubs().size());
+            clubNames = competition.getClubs().stream()
+                    .map(club -> club.getNameClub() != null ? club.getNameClub() : "Sin nombre")
+                    .collect(Collectors.toSet());
+        } else {
+            dto.setTotalClubs(0);
+        }
+        dto.setCompetitionClubs(clubNames);
 
         return dto;
     }

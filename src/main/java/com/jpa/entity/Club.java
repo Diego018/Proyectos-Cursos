@@ -39,6 +39,6 @@ public class Club {
             joinColumns = @JoinColumn(name = "id_club"),
             inverseJoinColumns = @JoinColumn(name = "id_football_competition")
     )
+    @ToString.Exclude
     private Set<FootballCompetition> footballCompetitions = new HashSet<>();
 }
-

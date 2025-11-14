@@ -23,6 +23,7 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -112,7 +113,7 @@ public class FootballCompetitionView extends VerticalLayout implements BeforeEnt
                 .setSortable(true);
 
         grid.addColumn(FootballCompetitionDTO::getTotalClubs)
-                .setHeader("Clubes")
+                .setHeader("Total Clubes")
                 .setAutoWidth(true)
                 .setSortable(true);
 
@@ -154,29 +155,33 @@ public class FootballCompetitionView extends VerticalLayout implements BeforeEnt
         CompetitionForm form = new CompetitionForm(competition);
 
         Button saveButton = new Button("Guardar", e -> {
-            try {
-                if (competition == null) {
-                    competitionService.createCompetition(
-                            form.getName(),
-                            form.getCuantityPrice(),
-                            form.getStartDate(),
-                            form.getEndDate()
-                    );
-                    showSuccessNotification("Competición creada exitosamente");
-                } else {
-                    competitionService.updateCompetition(
-                            competition.getIdCompetition(),
-                            form.getName(),
-                            form.getCuantityPrice(),
-                            form.getStartDate(),
-                            form.getEndDate()
-                    );
-                    showSuccessNotification("Competición actualizada exitosamente");
+            if (form.isValid()) {
+                try {
+                    if (competition == null) {
+                        competitionService.createCompetition(
+                                form.getName(),
+                                form.getCuantityPrice(),
+                                form.getStartDate(),
+                                form.getEndDate()
+                        );
+                        showSuccessNotification("Competición creada exitosamente");
+                    } else {
+                        competitionService.updateCompetition(
+                                competition.getIdCompetition(),
+                                form.getName(),
+                                form.getCuantityPrice(),
+                                form.getStartDate(),
+                                form.getEndDate()
+                        );
+                        showSuccessNotification("Competición actualizada exitosamente");
+                    }
+                    updateGrid();
+                    dialog.close();
+                } catch (Exception ex) {
+                    showErrorNotification("Error: " + ex.getMessage());
                 }
-                updateGrid();
-                dialog.close();
-            } catch (Exception ex) {
-                showErrorNotification("Error: " + ex.getMessage());
+            } else {
+                showErrorNotification("Complete correctamente todos los campos requeridos.");
             }
         });
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -247,6 +252,7 @@ public class FootballCompetitionView extends VerticalLayout implements BeforeEnt
             startDatePicker = new DatePicker("Fecha de Inicio");
             startDatePicker.setWidthFull();
             startDatePicker.setLocale(new Locale("es", "ES"));
+            startDatePicker.setMin(LocalDate.now()); // ⛔ PROHIBIR FECHAS PASADAS
 
             // Validación para no permitir fechas anteriores a hoy
             startDatePicker.setMin(java.time.LocalDate.now());
@@ -254,6 +260,19 @@ public class FootballCompetitionView extends VerticalLayout implements BeforeEnt
             endDatePicker = new DatePicker("Fecha de Fin");
             endDatePicker.setWidthFull();
             endDatePicker.setLocale(new Locale("es", "ES"));
+            endDatePicker.setMin(LocalDate.now()); // ⛔ PROHIBIR FECHAS PASADAS
+
+            // Validación fin > inicio
+            endDatePicker.addValueChangeListener(e -> {
+                LocalDate start = startDatePicker.getValue();
+                LocalDate end = endDatePicker.getValue();
+                if (start != null && end != null && end.isBefore(start)) {
+                    endDatePicker.setInvalid(true);
+                    endDatePicker.setErrorMessage("La fecha fin debe ser después de la fecha inicio.");
+                } else {
+                    endDatePicker.setInvalid(false);
+                }
+            });
 
             // Validación para no permitir fechas anteriores a hoy
             endDatePicker.setMin(java.time.LocalDate.now());
@@ -268,7 +287,7 @@ public class FootballCompetitionView extends VerticalLayout implements BeforeEnt
             });
 
             if (competition != null) {
-                nameField.setValue(competition.getName());
+                nameField.setValue(competition.getName() != null ? competition.getName() : "");
                 if (competition.getCuantityPrice() != null) {
                     priceField.setValue(competition.getCuantityPrice());
                 }
@@ -283,6 +302,12 @@ public class FootballCompetitionView extends VerticalLayout implements BeforeEnt
             add(nameField, priceField, startDatePicker, endDatePicker);
         }
 
+        public boolean isValid() {
+            return !nameField.isEmpty() &&
+                    !nameField.getValue().trim().isEmpty() &&
+                    !endDatePicker.isInvalid();
+        }
+
         public String getName() {
             return nameField.getValue();
         }
@@ -291,11 +316,11 @@ public class FootballCompetitionView extends VerticalLayout implements BeforeEnt
             return priceField.getValue();
         }
 
-        public java.time.LocalDate getStartDate() {
+        public LocalDate getStartDate() {
             return startDatePicker.getValue();
         }
 
-        public java.time.LocalDate getEndDate() {
+        public LocalDate getEndDate() {
             return endDatePicker.getValue();
         }
     }

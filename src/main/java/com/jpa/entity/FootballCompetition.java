@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -31,7 +32,6 @@ public class FootballCompetition {
     private LocalDate endDate;
 
     @ManyToMany(mappedBy = "footballCompetitions", fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Set<Club> clubs = new HashSet<>();
-
-
 }

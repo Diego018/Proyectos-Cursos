@@ -1,15 +1,18 @@
 package com.jpa.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.checkerframework.checker.units.qual.C;
+import org.hibernate.annotations.Check;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Check(constraints = "age >= 18")
 public class Player {
 
     @Id

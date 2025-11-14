@@ -1,4 +1,3 @@
-
 package com.jpa.dto;
 
 import lombok.AllArgsConstructor;
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ClubDTO {
 
-
     private Long idClub;
     private String nameClub;
     private String coachName;
@@ -18,6 +16,5 @@ public class ClubDTO {
     private String associationName;
     private Long associationId;
     private Integer totalPlayers;
-
 
 }

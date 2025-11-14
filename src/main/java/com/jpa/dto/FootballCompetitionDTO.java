@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -17,5 +19,5 @@ public class FootballCompetitionDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private Integer totalClubs;
-
+    private Set<String> competitionClubs;
 }
