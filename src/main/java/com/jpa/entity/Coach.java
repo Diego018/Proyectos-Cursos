@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Check;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Check(constraints = "age >= 35")
 public class Coach {
 
     @Id
